@@ -3,11 +3,16 @@ const _ = require('lodash');
 const axios = require('axios');
 const moment = require('moment');
 const fplapi = require('fpl-api-node');
-
-
 const { Client, RichEmbed } = require('discord.js');
-const client = new Client();
 
+//Ping
+var http = require("http");
+setInterval(function () {
+    http.get("https://fpl-discord-bot.herokuapp.com/");
+}, 300000); // every 5 minutes (300000)
+
+// Discord Bot
+const client = new Client();
 const prefix = process.env.BOT_PREFIX;
 
 client.on('ready', () => {
@@ -141,7 +146,10 @@ function getDeadline(message){
 
         var deadline = moment(week.deadline_time);
         var offset = moment(message.createdAt).utcOffset() - deadline.utcOffset();
-
+        console.log("User time: "+moment(message.createdAt).format('hh:mm A DD MMM YYYY'));
+        console.log("User offset: " + moment(message.createdAt).utcOffset());
+        console.log("FPL time: " + deadline.format('hh:mm A DD MMM YYYY'));
+        console.log("FPL offset: " + deadline.utcOffset());
         message.channel.send(`Game Week ${week.id} Deadline: ${deadline.add(offset, 'minutes').format('h:mm A DD MMM YYYY')}`);
     });
 }
