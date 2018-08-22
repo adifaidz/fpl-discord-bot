@@ -5,15 +5,17 @@ const moment = require('moment');
 const fplapi = require('fpl-api-node');
 const { Client, RichEmbed } = require('discord.js');
 
+
 //Ping
 var http = require("http");
 setInterval(function () {
-    http.get("https://fpl-discord-bot.herokuapp.com/");
+    http.get("http://fpl-discord-bot.herokuapp.com/");
 }, 300000); // every 5 minutes (300000)
 
 // Discord Bot
 const client = new Client();
 const prefix = process.env.BOT_PREFIX;
+const time_offset = process.env.BOT_MINUTE_OFFSET;
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -110,8 +112,6 @@ function getFixtures(message){
                     .setFooter('fantasy.premierleague.com', 'https://fantasy.premierleague.com/static/libsass/plfpl/dist/img/facebook-share.png');
                 var gameStr = '';
 
-                var offset = moment(message.createdAt).utcOffset() - moment(week.deadline_time).utcOffset();
-
                 fixtures.forEach((fixture) => {
                     var matchedTeams = {};
                     for (var i = 0; i < teams.length; i++) {
@@ -124,7 +124,7 @@ function getFixtures(message){
                             break;
                     }
                     console.log(matchedTeams);
-                    gameStr += `**${matchedTeams.home}** vs **${matchedTeams.away}**\n${moment(fixture.kickoff_time).add(offset,'minutes').format('hh:mm A DD MMM YYYY')}\n\n`;
+                    gameStr += `**${matchedTeams.home}** vs **${matchedTeams.away}**\n${moment(fixture.kickoff_time).add(time_offset,'minutes').format('hh:mm A DD MMM YYYY')}\n\n`;
                 });
 
                 embed.addField('----------------------', gameStr);
@@ -143,13 +143,7 @@ function getDeadline(message){
         let week = _.filter(weeks, function (week) {
             return (week.is_current && !week.finished) || week.is_next;
         })[0];
-
-        var deadline = moment(week.deadline_time);
-        var offset = moment(message.createdAt).utcOffset() - deadline.utcOffset();
-        console.log("User time: "+moment(message.createdAt).format('hh:mm A DD MMM YYYY'));
-        console.log("User offset: " + moment(message.createdAt).utcOffset());
-        console.log("FPL time: " + deadline.format('hh:mm A DD MMM YYYY'));
-        console.log("FPL offset: " + deadline.utcOffset());
-        message.channel.send(`Game Week ${week.id} Deadline: ${deadline.add(offset, 'minutes').format('h:mm A DD MMM YYYY')}`);
+        
+        message.channel.send(`Game Week ${week.id} Deadline: ${deadline.add(time_offset, 'minutes').format('h:mm A DD MMM YYYY')}`);
     });
 }
