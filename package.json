@@ -1,0 +1,31 @@
+{
+  "name": "fpl-discord-bot",
+  "version": "1.0.0",
+  "description": "Discord bot for fantasy pl",
+  "engines": {
+    "node": "8.11.4"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adifaidz/fpl-discord-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adifaidz/fpl-discord-bot/issues"
+  },
+  "homepage": "https://github.com/adifaidz/fpl-discord-bot#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "discord.js": "^11.4.2",
+    "dotenv": "^6.0.0",
+    "fpl-api-node": "^2.2.4",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.2"
+  }
+}
