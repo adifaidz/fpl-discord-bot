@@ -14,8 +14,8 @@ setInterval(function () {
 
 // Discord Bot
 const client = new Client();
-const prefix = process.env.BOT_PREFIX;
-const time_offset = process.env.BOT_MINUTE_OFFSET;
+const PREFIX = process.env.BOT_PREFIX;
+const TIMEZONE = process.env.BOT_TIMEZONE;
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -23,9 +23,9 @@ client.on('ready', () => {
 
 client.on('message', message => {
     if (message.author.bot) return;
-    if (message.content.indexOf(prefix) !== 0) return;
+    if (message.content.indexOf(PREFIX) !== 0) return;
 
-    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const args = message.content.slice(PREFIX.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     const content = args.join(' ');
 
@@ -124,7 +124,7 @@ function getFixtures(message){
                             break;
                     }
                     console.log(matchedTeams);
-                    gameStr += `**${matchedTeams.home}** vs **${matchedTeams.away}**\n${moment(fixture.kickoff_time).tz('Asia/Kuala_Lumpur').format('hh:mm A DD MMM YYYY')}\n\n`;
+                    gameStr += `**${matchedTeams.home}** vs **${matchedTeams.away}**\n${moment(fixture.kickoff_time).tz(TIMEZONE).format('hh:mm A DD MMM YYYY')}\n\n`;
                 });
 
                 embed.addField('----------------------', gameStr);
@@ -144,6 +144,6 @@ function getDeadline(message){
             return (week.is_current && !week.finished) || week.is_next;
         })[0];
         
-        message.channel.send(`Game Week ${week.id} Deadline: ${moment(week.deadline_time).tz('Asia/Kuala_Lumpur').format('h:mm A DD MMM YYYY')}`);
+        message.channel.send(`Game Week ${week.id} Deadline: ${moment(week.deadline_time).tz(TIMEZONE).format('h:mm A DD MMM YYYY')}`);
     });
 }
