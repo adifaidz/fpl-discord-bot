@@ -1,7 +1,7 @@
 require('dotenv').config()
 const _ = require('lodash');
 const axios = require('axios');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const fplapi = require('fpl-api-node');
 const { Client, RichEmbed } = require('discord.js');
 
@@ -124,7 +124,7 @@ function getFixtures(message){
                             break;
                     }
                     console.log(matchedTeams);
-                    gameStr += `**${matchedTeams.home}** vs **${matchedTeams.away}**\n${moment(fixture.kickoff_time).add(time_offset,'minutes').format('hh:mm A DD MMM YYYY')}\n\n`;
+                    gameStr += `**${matchedTeams.home}** vs **${matchedTeams.away}**\n${moment(fixture.kickoff_time).tz('Asia/Kuala_Lumpur').format('hh:mm A DD MMM YYYY')}\n\n`;
                 });
 
                 embed.addField('----------------------', gameStr);
@@ -144,6 +144,6 @@ function getDeadline(message){
             return (week.is_current && !week.finished) || week.is_next;
         })[0];
         
-        message.channel.send(`Game Week ${week.id} Deadline: ${deadline.add(time_offset, 'minutes').format('h:mm A DD MMM YYYY')}`);
+        message.channel.send(`Game Week ${week.id} Deadline: ${moment(week.deadline_time).tz('Asia/Kuala_Lumpur').format('h:mm A DD MMM YYYY')}`);
     });
 }
