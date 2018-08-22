@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Discord bot for fantasy pl",
   "engines": {
-    "node": "8.11.4"
+    "node": "8.*",
+    "npm": "*"
   },
   "main": "index.js",
   "scripts": {
