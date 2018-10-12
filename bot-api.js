@@ -1,23 +1,26 @@
 const _ = require('lodash');
 const axios = require('axios');
 const moment = require('moment-timezone');
+const accents = require('remove-accents');
+
 const fplapi = require('fpl-api-node');
 const { RichEmbed } = require('discord.js');
 
 const TIMEZONE = process.env.BOT_TIMEZONE;
 
-function getPlayerByName(message, name) {
+function getPlayerByName(message, query) {
+    let queryRegex = new RegExp("(?=.*" + query.join(")(?=.*") +").*");
     fplapi.getElements().then((players) => {
         let player = _.filter(players, function (player) {
-            return (player.first_name + player.second_name).toLowerCase().indexOf(name.toLowerCase()) > -1;
+            let player_name = accents.remove((player.first_name  + ' ' + player.second_name));
+            return player_name.toLowerCase().match(queryRegex);
         });
-
+        
         if (player.length === 0) {
             message.reply("I couldn't find this player, is his name spelled correctly?");
             return;
         }
 
-        console.log(player);
         player = player[0];
 
         fplapi.getElementTypes().then((positions) => {

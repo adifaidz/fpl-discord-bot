@@ -26,16 +26,15 @@ client.on('message', message => {
     const content = args.join(' ');
 
     if(command === "info") {
-        let name = content;
-        if (!name || name === ""){
+        let query = args;
+        if (!query || !query.length) {
             message.reply("did you forgot to input a player name?");
             return;
         }
         
-        Fpl.getPlayerByName(message, name);
+        Fpl.getPlayerByName(message, query);
     }
-
-    if(command === "fixtures")
+    else if(command === "fixtures")
         Fpl.getFixtures(message);
     else if(command === "deadline")
         Fpl.getDeadline(message);
