@@ -1,6 +1,6 @@
 require('dotenv').config();
 const Fpl = require('./bot-api');
-const { Client } = require('discord.js');
+const { RichEmbed, Client } = require('discord.js');
 
 
 //Ping
@@ -45,6 +45,24 @@ client.on('message', message => {
             return;
         }
         Fpl.getLeagueRanks(message, leagueId);
+    }
+    else if(command === "help"){
+        const embed = new RichEmbed()
+            .setTitle('List of commands')
+            .setColor(65415)
+            .setThumbnail(`https://fantasy.premierleague.com/static/libsass/plfpl/dist/img/facebook-share.png`)
+            .addField('----------------------',
+                `**${PREFIX}info [name]**\n`+
+                'Get player info by name\n\n' +
+                `**${PREFIX}fixtures**\n` +
+                'Get the latest fixtures in GMT+8 time\n\n' +
+                `**${PREFIX}deadline**\n` +
+                'Get the current week deadline\n\n' +
+                `**${PREFIX}league [league ID]**\n` +
+                'Get league standings by id\n\n' +
+                '***Report any issues at [Github](https://github.com/adifaidz/fpl-discord-bot)***')
+            .setFooter('fantasy.premierleague.com', 'https://fantasy.premierleague.com/static/libsass/plfpl/dist/img/facebook-share.png');
+        message.channel.send(embed);
     }
 }); 
 
