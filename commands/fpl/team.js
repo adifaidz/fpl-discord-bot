@@ -34,7 +34,7 @@ module.exports = class TeamCommand extends Command {
             else
                 return message.reply("something occurred. Please try again later.")
         }
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
         const page = await browser.newPage();
         page.setViewport({
             width: 1000,
