@@ -37,7 +37,7 @@ module.exports = class LeagueCommand extends Command {
 
             var standingStr = ''
             standings.forEach((standing, i) => {
-                standingStr += `${i+1}. ${standing.entry_name}\n`
+                standingStr += `${i+1}. ${standing.entry_name} - ${standing.entry}\n`
             })
 
             const embed = new RichEmbed()
