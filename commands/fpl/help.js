@@ -23,7 +23,9 @@ module.exports = class HelpCommand extends Command {
                 `**${prefix}fixtures**\n` +
                 'Get the latest fixtures in GMT+8 time\n\n' +
                 `**${prefix}deadline**\n` +
-                'Get the current week deadline\n\n' +
+                'Get current week\'s deadline\n\n' +
+                `**${prefix}team [team ID]**\n` +
+                'Get fpl team by id\n\n' +
                 `**${prefix}league [league ID]**\n` +
                 'Get league standings by id\n\n' +
                 '***Report any issues at [Github](https://github.com/adifaidz/fpl-discord-bot)***')

@@ -32,8 +32,8 @@ module.exports = class LeagueCommand extends Command {
             leagueId = leagueId.substr(dashIndex + 1)
 
         axios.get(`https://fantasy.premierleague.com/drf/leagues-classic-standings/${leagueId}?page=${page}`).then((response) => {
-            let league = response.data.league
-            let standings = response.data.standings.results
+            const league = response.data.league
+            const standings = response.data.standings.results
 
             var standingStr = ''
             standings.forEach((standing, i) => {
@@ -49,7 +49,9 @@ module.exports = class LeagueCommand extends Command {
             return message.channel.send(embed)
         }).catch((error) => {
             console.log(error)
-            message.reply("something occurred. Please try again later.")
+            if(error.status == 404)
+                return message.reply("I couldn't find league, is the id correct?")
+            return message.reply("something occurred. Please try again later.")
         })
     }
 }

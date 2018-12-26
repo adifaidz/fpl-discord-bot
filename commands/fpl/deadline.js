@@ -1,17 +1,16 @@
 const { Command } = require('discord.js-commando')
-const { RichEmbed } = require('discord.js')
 
 const _ = require('lodash')
 const moment = require('moment-timezone')
 const fplapi = require('fpl-api-node')
 
-module.exports = class HelpCommand extends Command {
+module.exports = class DeadlineCommand extends Command {
     constructor(client) {
         super(client, {
             group: 'fpl',
             name: 'deadline',
             memberName: 'deadline',
-            description: 'Displays a list of available commands, or detailed information for a specified command',
+            description: 'Get the current week\'s deadline',
         })
     }
 

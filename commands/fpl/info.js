@@ -5,7 +5,7 @@ const _ = require('lodash')
 const accents = require('remove-accents')
 const fplapi = require('fpl-api-node')
 
-module.exports = class HelpCommand extends Command {
+module.exports = class InfoCommand extends Command {
     constructor(client) {
         super(client, {
             group: 'fpl',
@@ -31,10 +31,8 @@ module.exports = class HelpCommand extends Command {
                 return player_name.toLowerCase().match(queryRegex)
             })
 
-            if (player.length === 0) {
-                message.reply("I couldn't find this player, is his name spelled correctly?")
-                return
-            }
+            if (player.length === 0) 
+                return message.reply("I couldn't find this player, is his name spelled correctly?")
 
             player = player[0]
 
