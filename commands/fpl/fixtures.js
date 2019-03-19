@@ -13,21 +13,30 @@ module.exports = class FixturesCommand extends Command {
             name: 'fixtures',
             memberName: 'fixtures',
             description: 'Get the latest fixtures in GMT+8 time',
+            args: [{
+                key: 'gameweek',
+                prompt: 'What is the game week ?',
+                type: 'integer',
+                default: ''
+            }]
         })
     }
 
-    run(message) {
+    run(message, {gameweek}) {
         const timezone = process.env.BOT_TIMEZONE
 
         Promise.all([fplapi.getEvents(), fplapi.getTeams()]).then((responses) => {
-            const weeks = responses[0]
             const teams =  responses[1]
+            const weeks = responses[0]
 
-            let week = _.filter(weeks, function (week) {
-                return (week.is_current && !week.finished) || week.is_next
-            })[0]
+            if(!gameweek)
+                gameweek = _.filter(weeks, function (week) {
+                    return (week.is_current && !week.finished) || week.is_next
+                })[0].id
+            
+            console.log('GAMEWEEK: '+gameweek);
 
-            axios.get(`https://fantasy.premierleague.com/drf/event/${week.id}/live`).then((response) => {
+            axios.get(`https://fantasy.premierleague.com/drf/event/${gameweek}/live`).then((response) => {
                 let fixtures = response.data.fixtures,
                     gameStr = '', teamGames = []
 
@@ -52,7 +61,7 @@ module.exports = class FixturesCommand extends Command {
                     gameStr += `**Double Game Teams : \n${doubleGameTeams.join(', ')}**\n\n`
 
                 const embed = new RichEmbed()
-                    .setTitle(`Game Week ${week.id}`)
+                    .setTitle(`Game Week ${gameweek}`)
                     .setColor(65415)
                     .setFooter('fantasy.premierleague.com', 'https://fantasy.premierleague.com/static/libsass/plfpl/dist/img/facebook-share.png')
                     .addField('----------------------', gameStr)
