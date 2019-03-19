@@ -29,7 +29,7 @@ module.exports = class FixturesCommand extends Command {
 
             axios.get(`https://fantasy.premierleague.com/drf/event/${week.id}/live`).then((response) => {
                 let fixtures = response.data.fixtures,
-                    gameStr = ''
+                    gameStr = '', teamGames = []
 
                 fixtures.forEach((fixture) => {
                     var matchedTeams = {}
@@ -44,7 +44,12 @@ module.exports = class FixturesCommand extends Command {
                     }
 
                     gameStr += `**${matchedTeams.home}** vs **${matchedTeams.away}**\n${moment(fixture.kickoff_time).tz(timezone).format('hh:mm A DD MMM YYYY')}\n\n`
+                    teamGames.push(matchedTeams.home, matchedTeams.away)
                 })
+
+                let doubleGameTeams = _.filter(teamGames, (val, i, iteratee) => _.includes(iteratee, val, i + 1));
+                if (doubleGameTeams.length)
+                    gameStr += `**Double Game Teams : \n${doubleGameTeams.join(', ')}**\n\n`
 
                 const embed = new RichEmbed()
                     .setTitle(`Game Week ${week.id}`)
