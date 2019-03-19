@@ -20,7 +20,7 @@ module.exports = class HelpCommand extends Command {
             .addField('----------------------',
                 `**${prefix}info [name]**\n` +
                 'Get player info by name\n\n' +
-                `**${prefix}fixtures**\n` +
+                `**${prefix}fixtures [gameweek]**\n` +
                 'Get the latest fixtures in GMT+8 time\n\n' +
                 `**${prefix}deadline**\n` +
                 'Get current week\'s deadline\n\n' +
