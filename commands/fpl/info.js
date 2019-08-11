@@ -3,7 +3,7 @@ const { RichEmbed } = require('discord.js')
 
 const _ = require('lodash')
 const accents = require('remove-accents')
-const fplapi = require('fpl-api-node')
+const fplapi = require('./../../fpl/api')
 
 module.exports = class InfoCommand extends Command {
     constructor(client) {
@@ -25,7 +25,7 @@ module.exports = class InfoCommand extends Command {
     run(message, {name}) {
         let query = name.split(' ')
         let queryRegex = new RegExp("(?=.*" + query.join(")(?=.*") + ").*")
-        fplapi.getElements().then((players) => {
+        fplapi.players().then((players) => {
             let player = _.filter(players, function (player) {
                 let player_name = accents.remove((player.first_name + ' ' + player.second_name))
                 return player_name.toLowerCase().match(queryRegex)
@@ -36,7 +36,7 @@ module.exports = class InfoCommand extends Command {
 
             player = player[0]
 
-            fplapi.getElementTypes().then((positions) => {
+            fplapi.positions().then((positions) => {
                 let position = _.filter(positions, function (position) {
                     return position.id === player.element_type
                 })

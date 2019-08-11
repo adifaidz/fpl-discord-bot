@@ -2,6 +2,8 @@ const { Attachment } = require('discord.js')
 const { Command } = require('discord.js-commando')
 const puppeteer = require('puppeteer')
 const axios = require('axios')
+const fplapi = require('./../../fpl/api')
+const _ = require('lodash')
 
 module.exports = class TeamCommand extends Command {
     constructor(client) {
@@ -21,8 +23,15 @@ module.exports = class TeamCommand extends Command {
     }
 
     async run(message, {team_id}) {
-        const team_apiURL = `https://fantasy.premierleague.com/drf/entry/${team_id}`
-        const teamURL = `https://fantasy.premierleague.com/a/team/${team_id}`
+        const team_apiURL = `https://fantasy.premierleague.com/api/entry/${team_id}/`
+        
+        let currentWeek = await fplapi.events().then((weeks) => {
+            return _.filter(weeks, function (week) {
+                return (week.is_current && !week.finished) || week.is_next
+            })[0].id
+        })
+
+        const teamURL = `https://fantasy.premierleague.com/entry/${team_id}/event/${currentWeek}`
         var err = null
         await axios.get(team_apiURL).catch((error) => {
             err = error
@@ -45,16 +54,16 @@ module.exports = class TeamCommand extends Command {
         await page.goto(teamURL, {
             waitUntil: 'networkidle2'
         })
-        await page.waitForSelector("#ismr-main")
+        await page.waitForSelector(".sc-bdVaja.elkxqB")
 
         let screenshot = await (async () => {
             const padding = 0
             const path = 'team.png'
-            const selector = '#ismr-main section'
+            const selector = '.sc-bdVaja.elkxqB'
 
             const rect = await page.evaluate(selector => {
-                document.querySelector('.ism-toggle-tabs__list').remove()
-                document.querySelectorAll('.ismjs-info').forEach(function (el) {
+                document.querySelector('.Tabs__TabList-sc-1-e6ubpf-0.eWgYSm').remove()
+                document.querySelectorAll('.Pitch__InfoControl-sc-1mctasb-10.hfcxVj').forEach(function (el) {
                     el.remove()
                 })
 

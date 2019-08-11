@@ -3,8 +3,7 @@ const { RichEmbed } = require('discord.js')
 
 const _ = require('lodash')
 const moment = require('moment-timezone')
-const axios = require('axios')
-const fplapi = require('fpl-api-node')
+const fplapi = require('./../../fpl/api')
 
 module.exports = class FixturesCommand extends Command {
     constructor(client) {
@@ -25,7 +24,7 @@ module.exports = class FixturesCommand extends Command {
     run(message, {gameweek}) {
         const timezone = process.env.BOT_TIMEZONE
 
-        Promise.all([fplapi.getEvents(), fplapi.getTeams()]).then((responses) => {
+        Promise.all([fplapi.events(), fplapi.teams()]).then((responses) => {
             const teams =  responses[1]
             const weeks = responses[0]
 
@@ -33,11 +32,9 @@ module.exports = class FixturesCommand extends Command {
                 gameweek = _.filter(weeks, function (week) {
                     return (week.is_current && !week.finished) || week.is_next
                 })[0].id
-            
-            console.log('GAMEWEEK: '+gameweek);
 
-            axios.get(`https://fantasy.premierleague.com/drf/event/${gameweek}/live`).then((response) => {
-                let fixtures = response.data.fixtures,
+            fplapi.fixtures(gameweek).then((response) => {
+                let fixtures = response.data,
                     gameStr = '', teamGames = []
 
                 fixtures.forEach((fixture) => {

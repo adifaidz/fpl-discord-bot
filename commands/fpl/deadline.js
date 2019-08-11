@@ -2,7 +2,7 @@ const { Command } = require('discord.js-commando')
 
 const _ = require('lodash')
 const moment = require('moment-timezone')
-const fplapi = require('fpl-api-node')
+const fplapi = require('./../../fpl/api')
 
 module.exports = class DeadlineCommand extends Command {
     constructor(client) {
@@ -17,7 +17,7 @@ module.exports = class DeadlineCommand extends Command {
     run(message) {
         const timezone = process.env.BOT_TIMEZONE
         
-        fplapi.getEvents().then((weeks) => {
+        fplapi.events().then((weeks) => {
             let week = _.filter(weeks, function (week) {
                 return (week.is_current && !week.finished) || week.is_next
             })[0]

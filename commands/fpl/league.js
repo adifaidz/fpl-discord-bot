@@ -1,7 +1,6 @@
 const { Command } = require('discord.js-commando')
 const { RichEmbed } = require('discord.js')
-
-const axios = require('axios')
+const fplapi = require('./../../fpl/api')
 
 module.exports = class LeagueCommand extends Command {
     constructor(client) {
@@ -31,7 +30,7 @@ module.exports = class LeagueCommand extends Command {
         if (dashIndex > -1)
             leagueId = leagueId.substr(dashIndex + 1)
 
-        axios.get(`https://fantasy.premierleague.com/drf/leagues-classic-standings/${leagueId}?page=${page}`).then((response) => {
+        fplapi.league(leagueId).then((response) => {
             const league = response.data.league
             const standings = response.data.standings.results
 
