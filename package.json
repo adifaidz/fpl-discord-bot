@@ -25,7 +25,7 @@
   "homepage": "https://github.com/adifaidz/fpl-discord-bot#readme",
   "dependencies": {
     "@bugsnag/js": "^5.1.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.3",
     "discord.js": "^11.4.2",
     "discord.js-commando": "^0.10.0",
     "dotenv": "^6.0.0",
